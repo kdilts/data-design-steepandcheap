@@ -1,11 +1,11 @@
-body { background-color: grey; }
+body { background-color: #cdcdcd; }
 
 h1{
 	color: black;
 	text-align: center;
 }
 
-li {
+li, p {
 	padding-right: 30%;
 	color: darkblue;
 }
@@ -16,6 +16,6 @@ strong {
 }
 
 .subheading {
-	font-size: 20px;
+	font-size: 26px;
 	color: darkblue;
 }

@@ -28,6 +28,9 @@
 			<!-- Use Case -->
 			<section>
 				<h3 class="subheading">Use Case</h3>
+				<p>
+					Kevin gets home from a day at work, and wants to relax. He fires up Chrome and goes to steepandcheap.com. After glancing at the current steal, he starts browsing the climbing section without any specific intent to buy anything. After spending some time ogling the pulley systems and mechanical ascenders, he stumbles across quick draw spines for $0.80 a piece and quickly orders twenty of them before someone else beats him to it.
+				</p>
 			</section>
 
 			<!-- Interaction Flow -->
@@ -46,7 +49,11 @@
 			<!-- Entities -->
 			<section>
 				<h5 class="subheading">Entities</h5>
-				<p></p>
+				<ul>
+					<li>Product</li>
+					<li>Category</li>
+					<li>Brand</li>
+				</ul>
 			</section>
 		</main>
 	</body>
