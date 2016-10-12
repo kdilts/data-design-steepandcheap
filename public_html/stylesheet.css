@@ -1,0 +1,21 @@
+body { background-color: grey; }
+
+h1{
+	color: black;
+	text-align: center;
+}
+
+li {
+	padding-right: 30%;
+	color: darkblue;
+}
+
+strong {
+	font-size: 22px;
+	color: black;
+}
+
+.subheading {
+	font-size: 20px;
+	color: darkblue;
+}
