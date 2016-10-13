@@ -52,32 +52,34 @@
 				<ul id="flexList">
 					<li class="listEntity">Product
 						<ul>
-							<li>productName (Primary Key)</li>
-							<li>price</li>
-							<li>imgPath</li>
+							<li>productId (Primary Key)</li>
+							<li>productName</li>
+							<li>productPrice</li>
+							<li>productImgPath</li>
 							<li>productSpecifications</li>
-							<li>reviews (Foreign Key to Review)</li>
-							<li>N-to-M relationship with Review</li>
+							<li>productReviews (Foreign Key to Review)</li>
+							<li>N-to-M relationship with User</li>
 						</ul>
 					</li>
-					<li class="listEntity">Review
+					<li class="listEntity">Review (Weak)
 						<ul>
-							<li>reviewID (Primary Key)</li>
-							<li>rating</li>
-							<li>datePosted</li>
+							<li>reviewId (Primary Key)</li>
+							<li>reviewRating</li>
+							<li>reviewDatePosted</li>
 							<li>reviewContent</li>
-							<li>authorID (Foreign Key to User)</li>
+							<li>reviewAuthorId (Foreign Key to User)</li>
 						</ul>
 					</li>
 					<li class="listEntity">User
 						<ul>
 							<li>userName (Primary Key)</li>
-							<li>password</li>
-							<li>reviewsPosted (Foreign Key to Review)</li>
-							<li>purchases (Foreign Key to Product)</li>
-							<li>address</li>
-							<li>emailAddress</li>
-							<li>1-to-N relationship with Review</li>
+							<li>userHash</li>
+							<li>userSalt</li>
+							<li>userReviewsPosted (Foreign Key to Review)</li>
+							<li>userPurchases (Foreign Key to Product)</li>
+							<li>userAddress</li>
+							<li>userEmail</li>
+							<li>N-to-M relationship with Product</li>
 						</ul>
 					</li>
 				</ul>
