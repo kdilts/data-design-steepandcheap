@@ -19,3 +19,7 @@ strong {
 	font-size: 26px;
 	color: darkblue;
 }
+
+.listEntity {
+	margin: 0 auto 1em;
+}

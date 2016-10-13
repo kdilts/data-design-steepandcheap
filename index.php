@@ -48,11 +48,33 @@
 
 			<!-- Entities -->
 			<section>
-				<h5 class="subheading">Entities</h5>
+				<h5 class="subheading">Entities and Attributes</h5>
 				<ul>
-					<li>Product</li>
-					<li>Category</li>
-					<li>Brand</li>
+					<li class="listEntity">Product
+						<ol>
+							<li>Name</li>
+							<li>Price</li>
+							<li>Image Paths</li>
+							<li>Technical Specifications</li>
+							<li>Product Reviews</li>
+						</ol>
+					</li>
+					<li class="listEntity">Review
+						<ol>
+							<li>Number of stars rating</li>
+							<li>Date</li>
+							<li>Content</li>
+							<li>Author ID</li>
+						</ol>
+					</li>
+					<li class="listEntity">User
+						<ol>
+							<li>User Name</li>
+							<li>Password</li>
+							<li>Reviews Posted</li>
+							<li>Purchases</li>
+						</ol>
+					</li>
 				</ul>
 			</section>
 		</main>
