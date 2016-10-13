@@ -53,7 +53,6 @@
 					<li class="listEntity">Product
 						<ul>
 							<li>productId (Primary Key)</li>
-							<li>productReviews (Foreign Key to Review)</li>
 							<li>productName</li>
 							<li>productPrice</li>
 							<li>productImgPath</li>
@@ -63,7 +62,6 @@
 					</li>
 					<li class="listEntity">Review (Weak)
 						<ul>
-							<li>reviewId (Primary Key)</li>
 							<li>reviewAuthorId (Foreign Key to User)</li>
 							<li>reviewProductId (Foreign Key to Product)</li>
 							<li>reviewRating</li>
@@ -73,9 +71,8 @@
 					</li>
 					<li class="listEntity">User
 						<ul>
-							<li>userName (Primary Key)</li>
-							<li>userReviewsPosted (Foreign Key to Review)</li>
-							<li>userPurchases (Foreign Key to Product)</li>
+							<li>userId (Primary Key)</li>
+							<li>userName</li>
 							<li>userHash</li>
 							<li>userSalt</li>
 							<li>userAddress</li>
