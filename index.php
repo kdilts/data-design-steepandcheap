@@ -82,6 +82,7 @@
 					</li>
 				</ul>
 			</section>
+			<img src="entities.svg" alt="There should be a diagram here!!!"/>
 		</main>
 	</body>
 </html>
