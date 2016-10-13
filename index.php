@@ -2,12 +2,12 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title>Data Design Project Phase 0</title>
+		<title>Data Design Project</title>
 		<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
 		<header>
-			<h1>Data Design Project Phase 0</h1>
+			<h1>Data Design Project</h1>
 		</header>
 		<main>
 
@@ -49,31 +49,36 @@
 			<!-- Entities -->
 			<section>
 				<h5 class="subheading">Entities and Attributes</h5>
-				<ul>
+				<ul id="flexList">
 					<li class="listEntity">Product
-						<ol>
-							<li>Name</li>
-							<li>Price</li>
-							<li>Image Paths</li>
-							<li>Technical Specifications</li>
-							<li>Product Reviews</li>
-						</ol>
+						<ul>
+							<li>productName (Primary Key)</li>
+							<li>price</li>
+							<li>imgPath</li>
+							<li>productSpecifications</li>
+							<li>reviews (Foreign Key to Review)</li>
+							<li>N-to-M relationship with Review</li>
+						</ul>
 					</li>
 					<li class="listEntity">Review
-						<ol>
-							<li>Number of stars rating</li>
-							<li>Date</li>
-							<li>Content</li>
-							<li>Author ID</li>
-						</ol>
+						<ul>
+							<li>reviewID (Primary Key)</li>
+							<li>rating</li>
+							<li>datePosted</li>
+							<li>reviewContent</li>
+							<li>authorID (Foreign Key to User)</li>
+						</ul>
 					</li>
 					<li class="listEntity">User
-						<ol>
-							<li>User Name</li>
-							<li>Password</li>
-							<li>Reviews Posted</li>
-							<li>Purchases</li>
-						</ol>
+						<ul>
+							<li>userName (Primary Key)</li>
+							<li>password</li>
+							<li>reviewsPosted (Foreign Key to Review)</li>
+							<li>purchases (Foreign Key to Product)</li>
+							<li>address</li>
+							<li>emailAddress</li>
+							<li>1-to-N relationship with Review</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
