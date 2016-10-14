@@ -9,6 +9,7 @@ CREATE TABLE user(
 	userSalt VARCHAR(20),
 	userAddress VARCHAR(1000),
 	userEmail VARCHAR(100),
+	INDEX (userId),
 	PRIMARY KEY(userId)
 );
 
@@ -17,7 +18,11 @@ CREATE TABLE review(
 	reviewProductId INT UNSIGNED NOT NULL,
 	reviewRating int UNSIGNED NOT NULL,
 	reviewDatePosted DATE NOT NULL,
-	reviewContent TEXT NOT NULL
+	reviewContent TEXT NOT NULL,
+	INDEX (reviewAuthorId),
+	INDEX (reviewProductId),
+	FOREIGN KEY(reviewAuthorId) REFERENCES user(userId),
+	FOREIGN KEY(reviewProductId) REFERENCES product(productId)
 );
 
 CREATE TABLE product(
@@ -26,5 +31,6 @@ CREATE TABLE product(
 	productPrice FLOAT NOT NULL,
 	productImgPath VARCHAR(80) NOT NULL,
 	productSpecifications TEXT NOT NULL,
+	INDEX (productId),
 	PRIMARY KEY(productId)
 );
