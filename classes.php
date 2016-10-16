@@ -47,14 +47,40 @@ class User {
 	/**
 	 * User constructor.
 	 * @param $newUserId int $newUserId of this user
-	 * @param $newUserName string $newUser
-	 * @param $newUserHash string $newUser
-	 * @param $newUserSalt string $newUser
-	 * @param $newUserAddress string $newUser
-	 * @param $newUserEmail string $newUser
+	 * @param $newUserName string $newUserName id of this user
+	 * @param $newUserHash string $newUserHash hash for this user
+	 * @param $newUserSalt string $newUserSalt salt for this user
+	 * @param $newUserAddress string $newUserAddress physical address for this user
+	 * @param $newUserEmail string $newUserEmail email address for this user
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
 	 */
 	public function __construct($newUserId, $newUserName, $newUserHash, $newUserSalt, $newUserAddress, $newUserEmail) {
+		try {
+			$this->setUserId($newUserId);
+			$this->setUserName($newUserName);
+			$this->setUserHash($newUserHash);
+			$this->setUserSalt($newUserSalt);
+			$this->setUserAddress($newUserAddress);
+			$this->setUserEmail($newUserEmail);
+		} catch(\InvalidArgumentException $invalidArgument){
+			// rethrow exception to caller
+			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(\RangeException $range){
+			// rethrow exception to caller
+			throw(new \RangeException($range->getMessage(), 0, $range));
+		} catch(\TypeError $typeError){
+			// rethrow exception to caller
+			throw(new \TypeError($typeError->getMessage(), 0, $typeError));
+		} catch(\Exception $exception){
+			// rethrow exception to caller
+			throw(new \Exception($exception->getMessage(), 0, $exception));
+		}
 	}
+
+
 }
 
 ?>
