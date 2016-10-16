@@ -81,62 +81,74 @@ class User {
 	}
 
 	/**
-	 * @return int
+	 * accessor method for user id
+	 * @return int value of user id
 	 */
 	public function getUserId(){ return $this->userId; }
 
 	/**
-	 * @return string
+	 * accessor method for user name
+	 * @return string value of user name
 	 */
 	public function getUserName(){ return $this->userName; }
 
 	/**
-	 * @return string
+	 * accessor method for user hash
+	 * @return string value of user hash
 	 */
 	public function getUserHash(){ return $this->userHash; }
 
 	/**
-	 * @return string
+	 * accessor method for user salt
+	 * @return string value of user salt
 	 */
 	public function getUserSalt(){ return $this->userSalt; }
 
 	/**
-	 * @return string
+	 * accessor method for user address
+	 * @return string value of user address
 	 */
 	public function getUserAddress(){ return $this->userAddress; }
 
 	/**
-	 * @return string
+	 * accessor method for user email
+	 * @return string value of user email
 	 */
 	public function getUserEmail(){ return $this->userEmail; }
 
 	/**
-	 * @param $newUserId
+	 * mutator method for user id
+	 * @param int $newUserId new value of user id
 	 */
 	public function setUserId($newUserId){}
 
 	/**
-	 * @param $newUserName
+	 * mutator method for user name
+	 * @param string $newUserName new value of user name
 	 */
 	public function setUserName($newUserName){}
 
 	/**
-	 * @param $newUserHash
+	 * mutator method for user hash
+	 * @param string $newUserHash new value of user hash
 	 */
 	public function setUserHash($newUserHash){}
 
 	/**
-	 * @param $newUserSalt
+	 * mutator method for user salt
+	 * @param string $newUserSalt new value of user salt
 	 */
 	public function setUserSalt($newUserSalt){}
 
 	/**
-	 * @param $newUserAddress
+	 * mutator method for user address
+	 * @param string $newUserAddress new value of user address
 	 */
 	public function setUserAddress($newUserAddress){}
 
 	/**
-	 * @param $newUserEmail
+	 * mutator method for user email
+	 * @param string $newUserEmail new value of user email
 	 */
 	public function setUserEmail($newUserEmail){}
 }
