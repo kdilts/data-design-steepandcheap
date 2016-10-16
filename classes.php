@@ -80,7 +80,65 @@ class User {
 		}
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getUserId(){ return $this->userId; }
 
+	/**
+	 * @return string
+	 */
+	public function getUserName(){ return $this->userName; }
+
+	/**
+	 * @return string
+	 */
+	public function getUserHash(){ return $this->userHash; }
+
+	/**
+	 * @return string
+	 */
+	public function getUserSalt(){ return $this->userSalt; }
+
+	/**
+	 * @return string
+	 */
+	public function getUserAddress(){ return $this->userAddress; }
+
+	/**
+	 * @return string
+	 */
+	public function getUserEmail(){ return $this->userEmail; }
+
+	/**
+	 * @param $newUserId
+	 */
+	public function setUserId($newUserId){}
+
+	/**
+	 * @param $newUserName
+	 */
+	public function setUserName($newUserName){}
+
+	/**
+	 * @param $newUserHash
+	 */
+	public function setUserHash($newUserHash){}
+
+	/**
+	 * @param $newUserSalt
+	 */
+	public function setUserSalt($newUserSalt){}
+
+	/**
+	 * @param $newUserAddress
+	 */
+	public function setUserAddress($newUserAddress){}
+
+	/**
+	 * @param $newUserEmail
+	 */
+	public function setUserEmail($newUserEmail){}
 }
 
 ?>
