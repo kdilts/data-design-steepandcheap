@@ -159,26 +159,89 @@ class User {
 	/**
 	 * mutator method for user hash
 	 * @param string $newUserHash new value of user hash
+	 * @throws \InvalidArgumentException if $newUserHash is not a string or insecure
+	 * @throws \RangeException if $newUserHash is > 80 characters
+	 * @throws \TypeError if $newUserHash is not a string
 	 */
-	public function setUserHash($newUserHash){}
+	public function setUserHash($newUserHash){
+		// verify that user hash is secure
+		$newUserHash = trim($newUserHash);
+		$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING);
+		if(empty($newUserHash) === true){
+			throw(new \InvalidArgumentException("user hash is empty or insecure"));
+		}
+
+		// verify that user hash will fit in the database
+		if(strlen($newUserHash) > 80){
+			throw(new \RangeException("user hash too long"));
+		}
+
+		// store the user hash
+		$this->userHash = $newUserHash;
+	}
 
 	/**
 	 * mutator method for user salt
 	 * @param string $newUserSalt new value of user salt
+	 * @throws \InvalidArgumentException if $newUserSalt is not a string or insecure
+	 * @throws \RangeException if $newUserSalt is > 20 characters
+	 * @throws \TypeError if $newUserSalt is not a string
 	 */
-	public function setUserSalt($newUserSalt){}
+	public function setUserSalt($newUserSalt){
+		// verify that user salt is secure
+		$newUserSalt = trim($newUserSalt);
+		$newUserSalt = filter_var($newUserSalt, FILTER_SANITIZE_STRING);
+
+		// verify that user salt will fit in the database
+		if(strlen($newUserSalt) > 20){
+			throw(new \RangeException("user salt too long"));
+		}
+
+		// store the user salt
+		$this->userSalt = $newUserSalt;
+	}
 
 	/**
 	 * mutator method for user address
 	 * @param string $newUserAddress new value of user address
+	 * @throws \InvalidArgumentException if $newUserAddress is not a string or insecure
+	 * @throws \RangeException if $newUserAddress is > 1000 characters
+	 * @throws \TypeError if $newUserAddress is not a string
 	 */
-	public function setUserAddress($newUserAddress){}
+	public function setUserAddress($newUserAddress){
+		// verify that user address is secure
+		$newUserAddress = trim($newUserAddress);
+		$newUserAddress = filter_var($newUserAddress, FILTER_SANITIZE_STRING);
+
+		// verify that user address will fit in the database
+		if(strlen($newUserAddress) > 1000){
+			throw(new \RangeException("user address too long"));
+		}
+
+		// store the user address
+		$this->userAddress = $newUserAddress;
+	}
 
 	/**
 	 * mutator method for user email
 	 * @param string $newUserEmail new value of user email
+	 * @throws \InvalidArgumentException if $newUserEmail is not a string or insecure
+	 * @throws \RangeException if $newUserEmail is > 100 characters
+	 * @throws \TypeError if $newUserEmail is not a string
 	 */
-	public function setUserEmail($newUserEmail){}
+	public function setUserEmail($newUserEmail){
+		// verify that user email is secure
+		$newUserEmail = trim($newUserEmail);
+		$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING);
+
+		// verify that user email will fit in the database
+		if(strlen($newUserEmail) > 20){
+			throw(new \RangeException("user email too long"));
+		}
+
+		// store the user email
+		$this->userEmail = $newUserEmail;
+	}
 }
 
 ?>
