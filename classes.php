@@ -119,14 +119,42 @@ class User {
 	/**
 	 * mutator method for user id
 	 * @param int $newUserId new value of user id
+	 * @throws \RangeException if $newUserId is not positive
+	 * @throws \TypeError if $newUserId is not an integer
 	 */
-	public function setUserId($newUserId){}
+	public function setUserId($newUserId){
+		// verify the user id is positive
+		if($newUserId <= 0){
+			throw(new \RangeException("user id is not positive"));
+		}
+
+		// store the user id
+		$this->userId = $newUserId;
+	}
 
 	/**
 	 * mutator method for user name
 	 * @param string $newUserName new value of user name
+	 * @throws \InvalidArgumentException if $newUserName is not a string or insecure
+	 * @throws \RangeException if $newUserName is > 20 characters
+	 * @throws \TypeError if $newUserName is not a string
 	 */
-	public function setUserName($newUserName){}
+	public function setUserName($newUserName){
+		// verify that user name is secure
+		$newUserName = trim($newUserName);
+		$newUserName = filter_var($newUserName, FILTER_SANITIZE_STRING);
+		if(empty($newUserName) === true){
+			throw(new \InvalidArgumentException("user name is empty or insecure"));
+		}
+
+		// verify that user name will fit in the database
+		if(strlen($newUserName) > 20){
+			throw(new \RangeException("user name too long"));
+		}
+
+		// store the user name
+		$this->userName = $newUserName;
+	}
 
 	/**
 	 * mutator method for user hash
