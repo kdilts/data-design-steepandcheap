@@ -360,6 +360,9 @@ class Product {
 		// verify that product name is secure
 		$newProductName = trim($newProductName);
 		$newProductName = filter_var($newProductName, FILTER_SANITIZE_STRING);
+		if(empty($newProductName) === true){
+			throw new \InvalidArgumentException("product name is empty or insecure");
+		}
 
 		// verify that product name will fit into database
 		if(strlen($newProductName) > 20){
@@ -395,6 +398,9 @@ class Product {
 		// verify that product name is secure
 		$newProductImgPath = trim($newProductImgPath);
 		$newProductImgPath = filter_var($newProductImgPath, FILTER_SANITIZE_STRING);
+		if(empty($newProductImgPath) === true){
+			throw new \InvalidArgumentException("product image path is empty or insecure");
+		}
 
 		// verify that product name will fit into database
 		if(strlen($newProductImgPath) > 80){
@@ -415,6 +421,9 @@ class Product {
 		// verify that product name is secure
 		$newProductSpecifications = trim($newProductSpecifications);
 		$newProductSpecifications = filter_var($newProductSpecifications, FILTER_SANITIZE_STRING);
+		if(empty($newProductSpecifications) === true){
+			throw new \InvalidArgumentException("product specification text is empty or insecure");
+		}
 
 		// store the product specifications
 		$this->productSpecifications = $newProductSpecifications;
@@ -422,48 +431,157 @@ class Product {
 }
 
 class Review {
+	//use ValidateDate;
 
+	/** id of the author that wrote this review. Foreign key
+	 * @var int $reviewAuthorId
+	 */
 	private $reviewAuthorId;
+
+	/** id of the product this review is about. Foreign key
+	 * @var int $reviewProductId
+	 */
 	private $reviewProductId;
+
+	/** rating 1 - 5 of the product this review is about.
+	 * @var int $reviewRating
+	 */
 	private $reviewRating;
+
+	/** date that this review was posted
+	 * @var \DateTime $reviewDatePosted
+	 */
 	private $reviewDatePosted;
+
+	/** content of this review
+	 * @var string $reviewContent
+	 */
 	private $reviewContent;
 
+	/**
+	 * Review constructor.
+	 * @param int $newReviewAuthorId
+	 * @param int $newReviewProductId
+	 * @param int $newReviewRating
+	 * @param \DateTime $newReviewDatePosted
+	 * @param string $newReviewContent
+	 * @throws \Exception
+	 * @throws \TypeError
+	 */
 	public function __construct($newReviewAuthorId, $newReviewProductId, $newReviewRating, $newReviewDatePosted, $newReviewContent) {
+		try{
+			$this->reviewAuthorId = $newReviewAuthorId;
+			$this->reviewProductId = $newReviewProductId;
+			$this->reviewRating = $newReviewRating;
+			$this->reviewDatePosted = $newReviewDatePosted;
+			$this->reviewContent = $newReviewContent;
+		} catch(\InvalidArgumentException $invalidArgumentException){
+			// rethrow exception to the caller
+			throw(new \InvalidArgumentException($invalidArgumentException->getMessage(),0,$invalidArgumentException));
+		} catch(\RangeException $rangeException){
+			// rethrow exception to the caller
+			throw(new \RangeException($rangeException->getMessage(),0,$rangeException));
+		} catch(\TypeError $typeError){
+			// rethrow exception to the caller
+			throw(new \TypeError($typeError->getMessage(),0,$typeError));
+		} catch(\Exception $exception){
+			// rethrow exception to the caller
+			throw(new \Exception($exception->getMessage(),0,$exception));
+		}
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getReviewAuthorId(){ return $this->reviewAuthorId; }
 
+	/**
+	 * @return int
+	 */
 	public function getReviewProductId(){ return $this->reviewProductId; }
 
+	/**
+	 * @return int
+	 */
 	public function getReviewRating(){ return $this->reviewRating; }
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getReviewDatePosted(){ return $this->reviewDatePosted; }
 
+	/**
+	 * @return string
+	 */
 	public function getReviewContent(){ return $this->reviewContent; }
 
+	/**
+	 * @param $newReviewAuthorId
+	 */
 	public function setReviewAuthorId($newReviewAuthorId){
-		// store the review
+		// verify that new id is positive
+		if($newReviewAuthorId <= 0){
+			throw new \RangeException("review author id not positive");
+		}
+
+		// store the review author id
 		$this->reviewAuthorId = $newReviewAuthorId;
 	}
 
+	/**
+	 * @param $newReviewProductId
+	 */
 	public function setReviewProductId($newReviewProductId){
-		// store the review
+		// verify that new id is positive
+		if($newReviewProductId <= 0){
+			throw new \RangeException("review product id not positive");
+		}
+
+		// store the review product id
 		$this->reviewProductId = $newReviewProductId;
 	}
 
+	/**
+	 * @param $newReviewRating
+	 */
 	public function setReviewRating($newReviewRating){
-		// store the review
+		// verify review rating is between 1 and 5
+		if($newReviewRating < 1 || $newReviewRating > 5){
+			throw new \RangeException("review rating is not between 1 and 5");
+		}
+
+		// store the review rating
 		$this->reviewRating = $newReviewRating;
 	}
 
+	/**
+	 * @param $newReviewDatePosted
+	 */
 	public function setReviewDatePosted($newReviewDatePosted){
-		// store the review
+		try {
+			//$newReviewDatePosted = self::validateDateTime($newReviewDatePosted);
+		} catch(\InvalidArgumentException $invalidArgumentException){
+			throw new \InvalidArgumentException($invalidArgumentException->getMessage(), 0, $invalidArgumentException);
+		} catch(\RangeException $rangeException){
+			throw new \RangeException($rangeException->getMessage(), 0, $rangeException);
+		}
+
+		// store the review date posted
 		$this->reviewDatePosted = $newReviewDatePosted;
 	}
 
+	/**
+	 * @param $newReviewContent
+	 */
 	public function setReviewContent($newReviewContent){
-		// store the review
+		// verify review content is secure
+		$newReviewContent = trim($newReviewContent);
+		$newReviewContent = filter_var($newReviewContent, FILTER_SANITIZE_STRING);
+		if(empty($newReviewContent) === true){
+			throw new \InvalidArgumentException("review content is empty or insecure");
+		}
+
+		// store the review content
 		$this->reviewContent = $newReviewContent;
 	}
 
