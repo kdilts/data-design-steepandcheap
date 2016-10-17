@@ -244,4 +244,138 @@ class User {
 	}
 }
 
+class Product {
+	/**
+	 * id for this product. this is the primary key.
+	 * @var int $productId
+	 */
+	private $productId;
+
+	/**
+	 * name for this product.
+	 * @var string $productName
+	 */
+	private $productName;
+
+	/**
+	 * price for this product.
+	 * @var float $productPrice
+	 */
+	private $productPrice;
+
+	/**
+	 * image path for this product.
+	 * @var string $productImgPath
+	 */
+	private $productImgPath;
+
+	/**
+	 * product specification text for this product.
+	 * @var string $productSpecifications
+	 */
+	private $productSpecifications;
+
+
+	/**
+	 * Product constructor.
+	 * @param $newProductId id of this product
+	 * @param $newProductName name of this product
+	 * @param $newProductPrice price of this product
+	 * @param $newProductImgPath image path of this product
+	 * @param $newProductSpecifications specification text for this product
+	 * @throws \InvalidArgumentException
+	 * @throws \RangeException
+	 * @throws \TypeError
+	 * @throws \Exception
+	 */
+	public function __construct($newProductId, $newProductName, $newProductPrice, $newProductImgPath, $newProductSpecifications) {
+		try {
+			$this->setProductId($newProductId);
+			$this->setProductName($newProductName);
+			$this->setProductPrice($newProductPrice);
+			$this->setProductImgPath($newProductImgPath);
+			$this->setProductSpecifications($newProductSpecifications);
+		} catch(\InvalidArgumentException $invalidArgumentException){
+			// rethrow the exception to the caller
+			throw (new \InvalidArgumentException($invalidArgumentException->getMessage(),0,$invalidArgumentException));
+		} catch(\RangeException $rangeException){
+			// rethrow the exception to the caller
+			throw (new \RangeException($rangeException->getMessage(),0,$rangeException));
+		} catch(\TypeError $typeError){
+			// rethrow the exception to the caller
+			throw (new \TypeError($typeError->getMessage(),0,$typeError));
+		} catch(\Exception $exception){
+			// rethrow the exception to the caller
+			throw (new \Exception($exception->getMessage(),0,$exception));
+		}
+	}
+
+	public function getProductId(){ return $this->productId; }
+
+	public function getProductName(){ return $this->productName; }
+
+	public function getProductPrice(){ return $this->productPrice; }
+
+	public function getProductImgPath(){ return $this->productImgPath; }
+
+	public function getProductSpecifications(){ return $this->productSpecifications; }
+
+	public function setProductId($newProductId){
+		// verify product id is positive
+		if($newProductId <= 0){
+			throw(new \RangeException("product id is not positive"));
+		}
+
+		// store the product id
+		$this->productId = $newProductId;
+	}
+
+	public function setProductName($newProductName){
+		// verify that product name is secure
+		$newProductName = trim($newProductName);
+		$newProductName = filter_var($newProductName, FILTER_SANITIZE_STRING);
+
+		// verify that product name will fit into database
+		if(strlen($newProductName) > 20){
+			throw(new \RangeException("product name too long"));
+		}
+
+		// store the product name
+		$this->productName = $newProductName;
+	}
+
+	public function setProductPrice($newProductPrice){
+		// verify product price is positive
+		if($newProductPrice <= 0){
+			throw(new \RangeException("product price is not positive"));
+		}
+
+		// store the product price
+		$this->productPrice = $newProductPrice;
+	}
+
+	public function setProductImgPath($newProductImgPath){
+		// verify that product name is secure
+		$newProductImgPath = trim($newProductImgPath);
+		$newProductImgPath = filter_var($newProductImgPath, FILTER_SANITIZE_STRING);
+
+		// verify that product name will fit into database
+		if(strlen($newProductImgPath) > 80){
+			throw(new \RangeException("product img path too long"));
+		}
+
+		// store the product img path
+		$this->productImgPath = $newProductImgPath;
+	}
+
+	public function setProductSpecifications($newProductSpecifications){
+		// verify that product name is secure
+		$newProductSpecifications = trim($newProductSpecifications);
+		$newProductSpecifications = filter_var($newProductSpecifications, FILTER_SANITIZE_STRING);
+
+		// store the product specifications
+		$this->productSpecifications = $newProductSpecifications;
+	}
+}
+
 ?>
