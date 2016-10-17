@@ -47,7 +47,7 @@ class Review {
 	 * @throws \TypeError if data types violate type hints
 	 * @throws \Exception if some other exception occurs
 	 */
-	public function __construct($newReviewAuthorId, $newReviewProductId, $newReviewRating, $newReviewDatePosted, $newReviewContent) {
+	public function __construct(int $newReviewAuthorId, int $newReviewProductId, int $newReviewRating, \DateTime $newReviewDatePosted, string $newReviewContent) {
 		try{
 			$this->reviewAuthorId = $newReviewAuthorId;
 			$this->reviewProductId = $newReviewProductId;
@@ -72,34 +72,44 @@ class Review {
 	/** accessor method for author id
 	 * @return int value of author id
 	 */
-	public function getReviewAuthorId(){ return $this->reviewAuthorId; }
+	public function getReviewAuthorId(){
+		return $this->reviewAuthorId;
+	}
 
 	/** accessor method for product id
 	 * @return int value of product id
 	 */
-	public function getReviewProductId(){ return $this->reviewProductId; }
+	public function getReviewProductId(){
+		return $this->reviewProductId;
+	}
 
 	/** accessor method for review rating
 	 * @return int value of review rating
 	 */
-	public function getReviewRating(){ return $this->reviewRating; }
+	public function getReviewRating(){
+		return $this->reviewRating;
+	}
 
 	/** accessor method for date posted
 	 * @return \DateTime value of date posted
 	 */
-	public function getReviewDatePosted(){ return $this->reviewDatePosted; }
+	public function getReviewDatePosted(){
+		return $this->reviewDatePosted;
+	}
 
 	/** accessor method for review content
 	 * @return string value of review content
 	 */
-	public function getReviewContent(){ return $this->reviewContent; }
+	public function getReviewContent(){
+		return $this->reviewContent;
+	}
 
 	/** mutator method for author id
 	 * @param int $newReviewAuthorId new value of review author id
 	 * @throws \RangeException if $newReviewAuthorId is not positive
 	 * @throws \TypeError if $newReviewAuthorId is not an integer
 	 */
-	public function setReviewAuthorId($newReviewAuthorId){
+	public function setReviewAuthorId(int $newReviewAuthorId){
 		// verify that new id is positive
 		if($newReviewAuthorId <= 0){
 			throw new \RangeException("review author id not positive");
@@ -114,7 +124,7 @@ class Review {
 	 * @throws \RangeException if $newReviewProductId is not positive
 	 * @throws \TypeError if $newReviewProductId is not an integer
 	 */
-	public function setReviewProductId($newReviewProductId){
+	public function setReviewProductId(int $newReviewProductId){
 		// verify that new id is positive
 		if($newReviewProductId <= 0){
 			throw new \RangeException("review product id not positive");
@@ -129,7 +139,7 @@ class Review {
 	 * @throws \RangeException if $newReviewRating is not between 1 and 5
 	 * @throws \TypeError if $newReviewRating is not an integer
 	 */
-	public function setReviewRating($newReviewRating){
+	public function setReviewRating(int $newReviewRating){
 		// verify review rating is between 1 and 5
 		if($newReviewRating < 1 || $newReviewRating > 5){
 			throw new \RangeException("review rating is not between 1 and 5");
@@ -144,7 +154,7 @@ class Review {
 	 * @throws \InvalidArgumentException if $newReviewDatePosted is not a valid object or string
 	 * @throws \RangeException if $newReviewDatePosted is a date that does not exist
 	 */
-	public function setReviewDatePosted($newReviewDatePosted){
+	public function setReviewDatePosted(\DateTime $newReviewDatePosted){
 		try {
 			//$newReviewDatePosted = self::validateDateTime($newReviewDatePosted);
 		} catch(\InvalidArgumentException $invalidArgumentException){
@@ -162,7 +172,7 @@ class Review {
 	 * @throws \InvalidArgumentException if $newReviewContent is not a string or insecure
 	 * @throws \TypeError if $newReviewContent is not a string
 	 */
-	public function setReviewContent($newReviewContent){
+	public function setReviewContent(string $newReviewContent){
 		// verify review content is secure
 		$newReviewContent = trim($newReviewContent);
 		$newReviewContent = filter_var($newReviewContent, FILTER_SANITIZE_STRING);

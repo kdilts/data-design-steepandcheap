@@ -57,7 +57,7 @@ class User {
 	 * @throws \TypeError if data types violate type hints
 	 * @throws \Exception if some other exception occurs
 	 */
-	public function __construct($newUserId, $newUserName, $newUserHash, $newUserSalt, $newUserAddress, $newUserEmail) {
+	public function __construct(int $newUserId, string $newUserName, string $newUserHash, string $newUserSalt, string $newUserAddress, string $newUserEmail) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setUserName($newUserName);
@@ -84,37 +84,49 @@ class User {
 	 * accessor method for user id
 	 * @return int value of user id
 	 */
-	public function getUserId(){ return $this->userId; }
+	public function getUserId(){
+		return $this->userId;
+	}
 
 	/**
 	 * accessor method for user name
 	 * @return string value of user name
 	 */
-	public function getUserName(){ return $this->userName; }
+	public function getUserName(){
+		return $this->userName;
+	}
 
 	/**
 	 * accessor method for user hash
 	 * @return string value of user hash
 	 */
-	public function getUserHash(){ return $this->userHash; }
+	public function getUserHash(){
+		return $this->userHash;
+	}
 
 	/**
 	 * accessor method for user salt
 	 * @return string value of user salt
 	 */
-	public function getUserSalt(){ return $this->userSalt; }
+	public function getUserSalt(){
+		return $this->userSalt;
+	}
 
 	/**
 	 * accessor method for user address
 	 * @return string value of user address
 	 */
-	public function getUserAddress(){ return $this->userAddress; }
+	public function getUserAddress(){
+		return $this->userAddress;
+	}
 
 	/**
 	 * accessor method for user email
 	 * @return string value of user email
 	 */
-	public function getUserEmail(){ return $this->userEmail; }
+	public function getUserEmail(){
+		return $this->userEmail;
+	}
 
 	/**
 	 * mutator method for user id
@@ -122,7 +134,7 @@ class User {
 	 * @throws \RangeException if $newUserId is not positive
 	 * @throws \TypeError if $newUserId is not an integer
 	 */
-	public function setUserId($newUserId){
+	public function setUserId(int $newUserId){
 		// verify the user id is positive
 		if($newUserId <= 0){
 			throw(new \RangeException("user id is not positive"));
@@ -139,7 +151,7 @@ class User {
 	 * @throws \RangeException if $newUserName is > 20 characters
 	 * @throws \TypeError if $newUserName is not a string
 	 */
-	public function setUserName($newUserName){
+	public function setUserName(string $newUserName){
 		// verify that user name is secure
 		$newUserName = trim($newUserName);
 		$newUserName = filter_var($newUserName, FILTER_SANITIZE_STRING);
@@ -163,7 +175,7 @@ class User {
 	 * @throws \RangeException if $newUserHash is > 80 characters
 	 * @throws \TypeError if $newUserHash is not a string
 	 */
-	public function setUserHash($newUserHash){
+	public function setUserHash(string $newUserHash){
 		// verify that user hash is secure
 		$newUserHash = trim($newUserHash);
 		$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING);
@@ -187,7 +199,7 @@ class User {
 	 * @throws \RangeException if $newUserSalt is > 20 characters
 	 * @throws \TypeError if $newUserSalt is not a string
 	 */
-	public function setUserSalt($newUserSalt){
+	public function setUserSalt(string $newUserSalt){
 		// verify that user salt is secure
 		$newUserSalt = trim($newUserSalt);
 		$newUserSalt = filter_var($newUserSalt, FILTER_SANITIZE_STRING);
@@ -208,7 +220,7 @@ class User {
 	 * @throws \RangeException if $newUserAddress is > 1000 characters
 	 * @throws \TypeError if $newUserAddress is not a string
 	 */
-	public function setUserAddress($newUserAddress){
+	public function setUserAddress(string $newUserAddress){
 		// verify that user address is secure
 		$newUserAddress = trim($newUserAddress);
 		$newUserAddress = filter_var($newUserAddress, FILTER_SANITIZE_STRING);
@@ -229,7 +241,7 @@ class User {
 	 * @throws \RangeException if $newUserEmail is > 100 characters
 	 * @throws \TypeError if $newUserEmail is not a string
 	 */
-	public function setUserEmail($newUserEmail){
+	public function setUserEmail(string $newUserEmail){
 		// verify that user email is secure
 		$newUserEmail = trim($newUserEmail);
 		$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING);
