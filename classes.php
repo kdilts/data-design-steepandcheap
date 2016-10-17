@@ -421,4 +421,52 @@ class Product {
 	}
 }
 
+class Review {
+
+	private $reviewAuthorId;
+	private $reviewProductId;
+	private $reviewRating;
+	private $reviewDatePosted;
+	private $reviewContent;
+
+	public function __construct($newReviewAuthorId, $newReviewProductId, $newReviewRating, $newReviewDatePosted, $newReviewContent) {
+	}
+
+	public function getReviewAuthorId(){ return $this->reviewAuthorId; }
+
+	public function getReviewProductId(){ return $this->reviewProductId; }
+
+	public function getReviewRating(){ return $this->reviewRating; }
+
+	public function getReviewDatePosted(){ return $this->reviewDatePosted; }
+
+	public function getReviewContent(){ return $this->reviewContent; }
+
+	public function setReviewAuthorId($newReviewAuthorId){
+		// store the review
+		$this->reviewAuthorId = $newReviewAuthorId;
+	}
+
+	public function setReviewProductId($newReviewProductId){
+		// store the review
+		$this->reviewProductId = $newReviewProductId;
+	}
+
+	public function setReviewRating($newReviewRating){
+		// store the review
+		$this->reviewRating = $newReviewRating;
+	}
+
+	public function setReviewDatePosted($newReviewDatePosted){
+		// store the review
+		$this->reviewDatePosted = $newReviewDatePosted;
+	}
+
+	public function setReviewContent($newReviewContent){
+		// store the review
+		$this->reviewContent = $newReviewContent;
+	}
+
+}
+
 ?>
