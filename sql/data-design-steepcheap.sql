@@ -1,8 +1,6 @@
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS product;
-
-SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS user;
 
 CREATE TABLE user(
 	userId INT UNSIGNED AUTO_INCREMENT NOT NULL,
@@ -15,6 +13,16 @@ CREATE TABLE user(
 	PRIMARY KEY(userId)
 );
 
+CREATE TABLE product(
+productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
+productName VARCHAR(20) NOT NULL,
+productPrice FLOAT NOT NULL,
+productImgPath VARCHAR(80) NOT NULL,
+productSpecifications TEXT NOT NULL,
+INDEX (productId),
+PRIMARY KEY(productId)
+);
+
 CREATE TABLE review(
 	reviewAuthorId INT UNSIGNED NOT NULL,
 	reviewProductId INT UNSIGNED NOT NULL,
@@ -25,14 +33,4 @@ CREATE TABLE review(
 	INDEX (reviewProductId),
 	FOREIGN KEY(reviewAuthorId) REFERENCES user(userId),
 	FOREIGN KEY(reviewProductId) REFERENCES product(productId)
-);
-
-CREATE TABLE product(
-	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	productName VARCHAR(20) NOT NULL,
-	productPrice FLOAT NOT NULL,
-	productImgPath VARCHAR(80) NOT NULL,
-	productSpecifications TEXT NOT NULL,
-	INDEX (productId),
-	PRIMARY KEY(productId)
 );
