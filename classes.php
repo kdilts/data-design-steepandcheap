@@ -460,13 +460,15 @@ class Review {
 
 	/**
 	 * Review constructor.
-	 * @param int $newReviewAuthorId
-	 * @param int $newReviewProductId
-	 * @param int $newReviewRating
-	 * @param \DateTime $newReviewDatePosted
-	 * @param string $newReviewContent
-	 * @throws \Exception
-	 * @throws \TypeError
+	 * @param int $newReviewAuthorId author id of this review
+	 * @param int $newReviewProductId product id of this review
+	 * @param int $newReviewRating rating 1 - 5 of this review
+	 * @param \DateTime $newReviewDatePosted date that this review was posted on
+	 * @param string $newReviewContent text content of this review
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
 	 */
 	public function __construct($newReviewAuthorId, $newReviewProductId, $newReviewRating, $newReviewDatePosted, $newReviewContent) {
 		try{
@@ -490,33 +492,35 @@ class Review {
 		}
 	}
 
-	/**
-	 * @return int
+	/** accessor method for author id
+	 * @return int value of author id
 	 */
 	public function getReviewAuthorId(){ return $this->reviewAuthorId; }
 
-	/**
-	 * @return int
+	/** accessor method for product id
+	 * @return int value of product id
 	 */
 	public function getReviewProductId(){ return $this->reviewProductId; }
 
-	/**
-	 * @return int
+	/** accessor method for review rating
+	 * @return int value of review rating
 	 */
 	public function getReviewRating(){ return $this->reviewRating; }
 
-	/**
-	 * @return \DateTime
+	/** accessor method for date posted
+	 * @return \DateTime value of date posted
 	 */
 	public function getReviewDatePosted(){ return $this->reviewDatePosted; }
 
-	/**
-	 * @return string
+	/** accessor method for review content
+	 * @return string value of review content
 	 */
 	public function getReviewContent(){ return $this->reviewContent; }
 
-	/**
-	 * @param $newReviewAuthorId
+	/** mutator method for author id
+	 * @param int $newReviewAuthorId new value of review author id
+	 * @throws \RangeException if $newReviewAuthorId is not positive
+	 * @throws \TypeError if $newReviewAuthorId is not an integer
 	 */
 	public function setReviewAuthorId($newReviewAuthorId){
 		// verify that new id is positive
@@ -528,8 +532,10 @@ class Review {
 		$this->reviewAuthorId = $newReviewAuthorId;
 	}
 
-	/**
-	 * @param $newReviewProductId
+	/** mutator method for product id
+	 * @param int $newReviewProductId new value of review product id
+	 * @throws \RangeException if $newReviewProductId is not positive
+	 * @throws \TypeError if $newReviewProductId is not an integer
 	 */
 	public function setReviewProductId($newReviewProductId){
 		// verify that new id is positive
@@ -541,8 +547,10 @@ class Review {
 		$this->reviewProductId = $newReviewProductId;
 	}
 
-	/**
-	 * @param $newReviewRating
+	/** mutator method for review rating
+	 * @param int $newReviewRating new value of review rating
+	 * @throws \RangeException if $newReviewRating is not between 1 and 5
+	 * @throws \TypeError if $newReviewRating is not an integer
 	 */
 	public function setReviewRating($newReviewRating){
 		// verify review rating is between 1 and 5
@@ -554,8 +562,10 @@ class Review {
 		$this->reviewRating = $newReviewRating;
 	}
 
-	/**
-	 * @param $newReviewDatePosted
+	/** mutator method for date posted
+	 * @param \DateTime $newReviewDatePosted new value of review date posted
+	 * @throws \InvalidArgumentException if $newReviewDatePosted is not a valid object or string
+	 * @throws \RangeException if $newReviewDatePosted is a date that does not exist
 	 */
 	public function setReviewDatePosted($newReviewDatePosted){
 		try {
@@ -570,8 +580,10 @@ class Review {
 		$this->reviewDatePosted = $newReviewDatePosted;
 	}
 
-	/**
-	 * @param $newReviewContent
+	/** mutator method for review content
+	 * @param string $newReviewContent new value of review content
+	 * @throws \InvalidArgumentException if $newReviewContent is not a string or insecure
+	 * @throws \TypeError if $newReviewContent is not a string
 	 */
 	public function setReviewContent($newReviewContent){
 		// verify review content is secure
