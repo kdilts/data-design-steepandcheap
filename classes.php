@@ -278,15 +278,15 @@ class Product {
 
 	/**
 	 * Product constructor.
-	 * @param $newProductId id of this product
-	 * @param $newProductName name of this product
-	 * @param $newProductPrice price of this product
-	 * @param $newProductImgPath image path of this product
-	 * @param $newProductSpecifications specification text for this product
-	 * @throws \InvalidArgumentException
-	 * @throws \RangeException
-	 * @throws \TypeError
-	 * @throws \Exception
+	 * @param int $newProductId id of this product
+	 * @param string $newProductName name of this product
+	 * @param float $newProductPrice price of this product
+	 * @param string $newProductImgPath image path of this product
+	 * @param string $newProductSpecifications specification text for this product
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
 	 */
 	public function __construct($newProductId, $newProductName, $newProductPrice, $newProductImgPath, $newProductSpecifications) {
 		try {
@@ -310,16 +310,36 @@ class Product {
 		}
 	}
 
+	/** accessor method for product id
+	 * @return int value of product id
+	 */
 	public function getProductId(){ return $this->productId; }
 
+	/** accessor method for product name
+	 * @return string value of product name
+	 */
 	public function getProductName(){ return $this->productName; }
 
+	/** accessor method for product price
+	 * @return float value of product price
+	 */
 	public function getProductPrice(){ return $this->productPrice; }
 
+	/** accessor method for product image path
+	 * @return string value of product image path
+	 */
 	public function getProductImgPath(){ return $this->productImgPath; }
 
+	/** accessor method for product specifications
+	 * @return string value of product specifications
+	 */
 	public function getProductSpecifications(){ return $this->productSpecifications; }
 
+	/** mutator method for product id
+	 * @param int $newProductId new value of product id
+	 * @throws \RangeException if $newProductId is not positive
+	 * @throws \TypeError if $newProductId is not an integer
+	 */
 	public function setProductId($newProductId){
 		// verify product id is positive
 		if($newProductId <= 0){
@@ -330,6 +350,12 @@ class Product {
 		$this->productId = $newProductId;
 	}
 
+	/** mutator method for product name
+	 * @param string $newProductName new value of product name
+	 * @throws \InvalidArgumentException if $newProductName is insecure, or not a string
+	 * @throws \RangeException if $newProductName is too long
+	 * @throws \TypeError if $newProductName is not a string
+	 */
 	public function setProductName($newProductName){
 		// verify that product name is secure
 		$newProductName = trim($newProductName);
@@ -344,6 +370,11 @@ class Product {
 		$this->productName = $newProductName;
 	}
 
+	/** mutator method for product price
+	 * @param float $newProductPrice
+	 * @throws \RangeException if $newProductPrice is not positive
+	 * @throws \TypeError if $newProductPrice is not a float
+	 */
 	public function setProductPrice($newProductPrice){
 		// verify product price is positive
 		if($newProductPrice <= 0){
@@ -354,6 +385,12 @@ class Product {
 		$this->productPrice = $newProductPrice;
 	}
 
+	/** mutator method for product image path
+	 * @param string $newProductImgPath
+	 * @throws \InvalidArgumentException if $newProductImgPath is insecure, or not a string
+	 * @throws \RangeException if $newProductImgPath is too long
+	 * @throws \TypeError if $newProductImgPath is not a string
+	 */
 	public function setProductImgPath($newProductImgPath){
 		// verify that product name is secure
 		$newProductImgPath = trim($newProductImgPath);
@@ -368,6 +405,12 @@ class Product {
 		$this->productImgPath = $newProductImgPath;
 	}
 
+	/** mutator method for product specification text
+	 * @param string $newProductSpecifications
+	 * @throws \InvalidArgumentException if $newProductSpecifications is insecure, or not a string
+	 * @throws \RangeException if $newProductSpecifications is too long
+	 * @throws \TypeError if $newProductSpecifications is not a string
+	 */
 	public function setProductSpecifications($newProductSpecifications){
 		// verify that product name is secure
 		$newProductSpecifications = trim($newProductSpecifications);
