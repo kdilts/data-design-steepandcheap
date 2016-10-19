@@ -154,7 +154,7 @@ class User {
 	public function setUserName(string $newUserName){
 		// verify that user name is secure
 		$newUserName = trim($newUserName);
-		$newUserName = filter_var($newUserName, FILTER_SANITIZE_STRING);
+		$newUserName = filter_var($newUserName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newUserName) === true){
 			throw(new \InvalidArgumentException("user name is empty or insecure"));
 		}
@@ -178,7 +178,7 @@ class User {
 	public function setUserHash(string $newUserHash){
 		// verify that user hash is secure
 		$newUserHash = trim($newUserHash);
-		$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING);
+		$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newUserHash) === true){
 			throw(new \InvalidArgumentException("user hash is empty or insecure"));
 		}
@@ -202,7 +202,7 @@ class User {
 	public function setUserSalt(string $newUserSalt){
 		// verify that user salt is secure
 		$newUserSalt = trim($newUserSalt);
-		$newUserSalt = filter_var($newUserSalt, FILTER_SANITIZE_STRING);
+		$newUserSalt = filter_var($newUserSalt, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 		// verify that user salt will fit in the database
 		if(strlen($newUserSalt) > 20){
@@ -223,7 +223,7 @@ class User {
 	public function setUserAddress(string $newUserAddress){
 		// verify that user address is secure
 		$newUserAddress = trim($newUserAddress);
-		$newUserAddress = filter_var($newUserAddress, FILTER_SANITIZE_STRING);
+		$newUserAddress = filter_var($newUserAddress, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 		// verify that user address will fit in the database
 		if(strlen($newUserAddress) > 1000){
@@ -244,7 +244,7 @@ class User {
 	public function setUserEmail(string $newUserEmail){
 		// verify that user email is secure
 		$newUserEmail = trim($newUserEmail);
-		$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING);
+		$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 		// verify that user email will fit in the database
 		if(strlen($newUserEmail) > 20){

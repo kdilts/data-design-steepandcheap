@@ -133,7 +133,7 @@ class Product {
 	public function setProductName(string $newProductName){
 		// verify that product name is secure
 		$newProductName = trim($newProductName);
-		$newProductName = filter_var($newProductName, FILTER_SANITIZE_STRING);
+		$newProductName = filter_var($newProductName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProductName) === true){
 			throw new \InvalidArgumentException("product name is empty or insecure");
 		}
@@ -171,7 +171,7 @@ class Product {
 	public function setProductImgPath(string $newProductImgPath){
 		// verify that product name is secure
 		$newProductImgPath = trim($newProductImgPath);
-		$newProductImgPath = filter_var($newProductImgPath, FILTER_SANITIZE_STRING);
+		$newProductImgPath = filter_var($newProductImgPath, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProductImgPath) === true){
 			throw new \InvalidArgumentException("product image path is empty or insecure");
 		}
@@ -194,7 +194,7 @@ class Product {
 	public function setProductSpecifications(string $newProductSpecifications){
 		// verify that product name is secure
 		$newProductSpecifications = trim($newProductSpecifications);
-		$newProductSpecifications = filter_var($newProductSpecifications, FILTER_SANITIZE_STRING);
+		$newProductSpecifications = filter_var($newProductSpecifications, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProductSpecifications) === true){
 			throw new \InvalidArgumentException("product specification text is empty or insecure");
 		}

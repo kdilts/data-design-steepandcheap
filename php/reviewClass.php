@@ -175,7 +175,7 @@ class Review {
 	public function setReviewContent(string $newReviewContent){
 		// verify review content is secure
 		$newReviewContent = trim($newReviewContent);
-		$newReviewContent = filter_var($newReviewContent, FILTER_SANITIZE_STRING);
+		$newReviewContent = filter_var($newReviewContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newReviewContent) === true){
 			throw new \InvalidArgumentException("review content is empty or insecure");
 		}
