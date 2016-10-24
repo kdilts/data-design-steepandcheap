@@ -46,7 +46,7 @@ class User implements \JsonSerializable {
 
 	/**
 	 * User constructor.
-	 * @param $newUserId int $newUserId of this user
+	 * @param $newUserId int|null $newUserId of this user
 	 * @param $newUserName string $newUserName id of this user
 	 * @param $newUserHash string $newUserHash hash for this user
 	 * @param $newUserSalt string $newUserSalt salt for this user
@@ -57,7 +57,7 @@ class User implements \JsonSerializable {
 	 * @throws \TypeError if data types violate type hints
 	 * @throws \Exception if some other exception occurs
 	 */
-	public function __construct(int $newUserId, string $newUserName, string $newUserHash, string $newUserSalt, string $newUserAddress, string $newUserEmail) {
+	public function __construct(int $newUserId = null, string $newUserName, string $newUserHash, string $newUserSalt, string $newUserAddress, string $newUserEmail) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setUserName($newUserName);
@@ -130,11 +130,11 @@ class User implements \JsonSerializable {
 
 	/**
 	 * mutator method for user id
-	 * @param int $newUserId new value of user id
+	 * @param int|null $newUserId new value of user id
 	 * @throws \RangeException if $newUserId is not positive
 	 * @throws \TypeError if $newUserId is not an integer
 	 */
-	public function setUserId(int $newUserId){
+	public function setUserId(int $newUserId = null){
 		// verify the user id is positive
 		if($newUserId <= 0){
 			throw(new \RangeException("user id is not positive"));
