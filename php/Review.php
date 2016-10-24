@@ -8,7 +8,7 @@ namespace Edu\Cnm\kdilts\DataDesign;
  * @version 1.0.0
  */
 class Review {
-	//use ValidateDate;
+	use ValidateDate;
 
 	/** id of the author that wrote this review. Foreign key
 	 * @var int $reviewAuthorId
@@ -403,7 +403,7 @@ class Review {
 	 */
 	public static function getReviewByDatePosted(\PDO $pdo, int $reviewDatePosted){
 		// sanitize date before searching
-		//TODO validate the date somehow
+		self::validateDate($reviewDatePosted);
 
 		// create query template
 		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewDatePosted LIKE :reviewDatePosted";
