@@ -367,8 +367,50 @@ class Review {
 		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewRating LIKE :reviewRating";
 		$statement = $pdo->prepare($query);
 
-		// bind the review product id to the place holder in the template
+		// bind the review rating to the place holder in the template
 		$parameters = ["reviewRating" => $reviewRating];
+		$statement->execute($parameters);
+
+		// grab the review from mySQL
+		try{
+			$review = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$review = new Review(
+					$row["reviewAuthorId"],
+					$row["reviewProductId"],
+					$row["reviewRating"],
+					$row["reviewDatePosted"],
+					$row["reviewContent"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($review);
+	}
+
+	/**
+	 * get review by reviewDatePosted
+	 * @param \PDO $pdo
+	 * @param int $reviewDatePosted
+	 * @return Review|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getReviewByDatePosted(\PDO $pdo, int $reviewDatePosted){
+		// sanitize date before searching
+		//TODO validate the date somehow
+
+		// create query template
+		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewDatePosted LIKE :reviewDatePosted";
+		$statement = $pdo->prepare($query);
+
+		// bind the review date posted to the place holder in the template
+		$parameters = ["reviewDatePosted" => $reviewDatePosted];
 		$statement->execute($parameters);
 
 		// grab the review from mySQL
