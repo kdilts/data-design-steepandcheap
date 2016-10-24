@@ -435,4 +435,50 @@ class Review {
 		return($review);
 	}
 
+	/**
+	 * get review by reviewContent
+	 * @param \PDO $pdo
+	 * @param string $reviewContent
+	 * @return Review|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getReviewByContent(\PDO $pdo, string $reviewContent){
+		// sanitize date before searching
+		$reviewContent = trim($reviewContent);
+		$reviewContent = filter_var($reviewContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($reviewContent) === true){
+			throw(new \PDOException("review content invalid"));
+		}
+
+		// create query template
+		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewContent LIKE :reviewContent";
+		$statement = $pdo->prepare($query);
+
+		// bind the review date posted to the place holder in the template
+		$parameters = ["reviewContent" => $reviewContent];
+		$statement->execute($parameters);
+
+		// grab the review from mySQL
+		try{
+			$review = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$review = new Review(
+					$row["reviewAuthorId"],
+					$row["reviewProductId"],
+					$row["reviewRating"],
+					$row["reviewDatePosted"],
+					$row["reviewContent"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($review);
+	}
+
 }
