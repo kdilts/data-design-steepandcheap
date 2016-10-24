@@ -301,7 +301,7 @@ class User implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "UPDATE user SET userId = :userId, userName = :userName, userEmail = :userEmail, userHash = :userHash, userSalt = :userSalt";
+		$query = "UPDATE user SET userId = :userId, userName = :userName, userHash = :userHash, userSalt = :userSalt, userAddress = :userAddress, userEmail = :userEmail";
 		$statement = $pdo->prepare($query);
 
 		// bind variables to placeholder in template
@@ -315,9 +315,46 @@ class User implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
-	public static function getUserById(\PDO $pdo, string $userId){}
+	public static function getUserById(\PDO $pdo, string $userId){
+		// sanitize id before searching
+		if($userId <= 0){
+			throw new \PDOException("user id must be positive");
+		}
 
-	public static function getUserByName(\PDO $pdo, string $userName){}
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userId LIKE :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the user id to the place holder in the template
+		$parameters = ["userId" => $userId];
+		$statement->execute($parameters);
+
+		// grab the user from mySQL
+		try{
+			$user = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$user = new user(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($user);
+	}
+
+	public static function getUserByName(\PDO $pdo, string $userName){
+
+	}
 
 	public static function getUserByEmail(\PDO $pdo, string $userEmail){}
 
