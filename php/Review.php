@@ -184,4 +184,81 @@ class Review {
 		$this->reviewContent = $newReviewContent;
 	}
 
+
+	/**
+	 * inserts this review into mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public function insert(\PDO $pdo){
+		// enforce reviewId is null - don't insert review that already exists
+		if($this->reviewId !== null){
+			throw new \PDOException("not a new review");
+		}
+
+		// create query template
+		$query = "INSERT INTO review(reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent) VALUES (:reviewAuthorId, :reviewProductId, :reviewRating, :reviewDatePosted, :reviewContent)";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = [
+			"reviewAuthorId" => $this->reviewAuthorId,
+			"reviewProductId" => $this->reviewProductId,
+			"reviewRating" => $this->reviewRating,
+			"reviewDatePosted" => $this->reviewDatePosted,
+			"reviewContent" => $this->reviewContent
+		];
+		$statement->execute($parameters);
+
+		// update null reviewId with what mySQL just gave us
+		$this->reviewId = intval($pdo->lastInsertId());
+	}
+
+	/**
+	 * deletes review from mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public function delete(\PDO $pdo){
+		// enforce reviewId not null - don't delete review that does not exist
+		if($this->reviewId === null){
+			throw new \PDOException("unable to delete review that does not exist");
+		}
+
+		// create query template
+		$query = "DELETE FROM review WHERE reviewId = :reviewId";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = ["reviewId" => $this->reviewId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates review in mySQL
+	 * @param \PDO $pdo
+	 */
+	public function update(\PDO $pdo){
+		// enforce reviewId not null - don't delete review that does not exist
+		if($this->reviewId === null){
+			throw new \PDOException("unable to update review that does not exist");
+		}
+
+		// create query template
+		$query = "UPDATE review SET reviewId = :reviewId, reviewName = :reviewName";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to placeholder in template
+		$parameters = [
+			"reviewAuthorId" => $this->reviewAuthorId,
+			"reviewProductId" => $this->reviewProductId,
+			"reviewRating" => $this->reviewRating,
+			"reviewDatePosted" => $this->reviewDatePosted,
+			"reviewContent" => $this->reviewContent
+		];
+		$statement->execute($parameters);
+	}
+
 }
