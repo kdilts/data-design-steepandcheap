@@ -324,6 +324,50 @@ class Product {
 	}
 
 	/**
+	 * returns a product by productName
+	 * @param \PDO $pdo
+	 * @param string $productName
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getProductByName(\PDO $pdo, string $productName){
+		// sanitize productName before searching
+		$productName = trim($productName);
+		$productName = filter_var($productName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($productName) === true){
+			throw (new \PDOException("product name is invalid"));
+		}
+		// create query template
+		$query = "SELECT productId, productName, productPrice, productImgPath, productSpecifications FROM product WHERE productName LIKE :productName";
+		$statement = $pdo->prepare($query);
+		// bind productName to placeholder in template
+		$productName = "%$productName%";
+		$parameters = ["productName" => $productName];
+		$statement->execute($parameters);
+		// build array of products
+		$products = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new User(
+					$row["productId"],
+					$row["productName"],
+					$row["productPrice"],
+					$row["productImgPath"],
+					$row["productSpecifications"]
+				);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
+
+	/**
 	 * returns a product by productPrice
 	 * @param \PDO $pdo
 	 * @param float $productPrice
