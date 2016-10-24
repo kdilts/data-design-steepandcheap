@@ -307,7 +307,7 @@ class Product {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false){
-				$product = new product(
+				$product = new Product(
 					$row["productId"],
 					$row["productName"],
 					$row["productPrice"],
@@ -324,19 +324,17 @@ class Product {
 	}
 
 	/**
-	 * returns a product by productName
+	 * returns a product by productPrice
 	 * @param \PDO $pdo
-	 * @param string $productName
+	 * @param float $productPrice
 	 * @return \SplFixedArray
 	 * @throws \PDOException
 	 * @throws \TypeError
 	 */
-	public static function getProductByName(\PDO $pdo, string $productName){
+	public static function getProductByPrice(\PDO $pdo, float $productPrice){
 		// sanitize productName before searching
-		$productName = trim($productName);
-		$productName = filter_var($productName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($productName) === true){
-			throw (new \PDOException("product name is invalid"));
+		if($productPrice <= 0){
+			throw new \PDOException("product price must be positive");
 		}
 
 		// create query template
@@ -344,8 +342,8 @@ class Product {
 		$statement = $pdo->prepare($query);
 
 		// bind productName to placeholder in template
-		$productName = "%$productName%";
-		$parameters = ["productName" => $productName];
+		$productPrice = "%$productPrice%";
+		$parameters = ["productPrice" => $productPrice];
 		$statement->execute($parameters);
 
 		// build array of products
@@ -353,7 +351,7 @@ class Product {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new User(
+				$product = new Product(
 					$row["productId"],
 					$row["productName"],
 					$row["productPrice"],
@@ -370,4 +368,6 @@ class Product {
 
 		return($products);
 	}
+
+
 }
