@@ -481,4 +481,49 @@ class Review {
 		return($review);
 	}
 
+	/**
+	 * returns all reviews
+	 * @param \PDO $pdo
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getAllReviews(\PDO $pdo){
+		// create query template
+		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build array of reviews
+		$reviews = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$review = new Review(
+					$row["reviewAuthorId"],
+					$row["reviewProductId"],
+					$row["reviewRating"],
+					$row["reviewDatePosted"],
+					$row["reviewContent"]
+				);
+				$reviews[$reviews->key()] = $review;
+				$reviews->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($reviews);
+	}
+
+	/**
+	 * formats state variables for JSON serialization
+	 * @return array
+	 */
+	public function jsonSerialize(){
+		$fields = get_object_vars($this);
+		return $fields;
+	}
+	
 }
