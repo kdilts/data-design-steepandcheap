@@ -350,7 +350,7 @@ class Product {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new User(
+				$product = new Product(
 					$row["productId"],
 					$row["productName"],
 					$row["productPrice"],
@@ -413,5 +413,39 @@ class Product {
 		return($products);
 	}
 
-
+	public static function getProductByImgPath(\PDO $pdo, string $productImgPath){
+		// sanitize productImgPath before searching
+		$productImgPath = trim($productImgPath);
+		$productImgPath = filter_var($productImgPath, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($productImgPath) === true){
+			throw (new \PDOException("product name is invalid"));
+		}
+		// create query template
+		$query = "SELECT productId, productName, productPrice, productImgPath, productSpecifications FROM product WHERE productImgPath LIKE :productImgPath";
+		$statement = $pdo->prepare($query);
+		// bind productImgPath to placeholder in template
+		$productImgPath = "%$productImgPath%";
+		$parameters = ["productImgPath" => $productImgPath];
+		$statement->execute($parameters);
+		// build array of products
+		$products = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product(
+					$row["productId"],
+					$row["productName"],
+					$row["productPrice"],
+					$row["productImgPath"],
+					$row["productSpecifications"]
+				);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
 }
