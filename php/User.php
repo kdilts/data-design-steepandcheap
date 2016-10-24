@@ -393,11 +393,52 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
-	public static function getUserByEmail(\PDO $pdo, string $userEmail){}
-
 	public static function getUserByHash(\PDO $pdo, string $userHash){}
 
 	public static function getUserBySalt(\PDO $pdo, string $userSalt){}
+
+	public static function getUserByAddress(\PDO $pdo, string $userAddress){}
+
+	public static function getUserByEmail(\PDO $pdo, string $userEmail){
+		// sanitize userEmail before searching
+		$userEmail = trim($userEmail);
+		$userEmail = filter_var($userEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($userEmail) === true){
+			throw (new \PDOException("userEmail is invalid"));
+		}
+
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userEmail LIKE :userEmail";
+		$statement = $pdo->prepare($query);
+
+		// bind userName to placeholder in template
+		$userEmail = "%$userEmail%";
+		$parameters = ["userEmail" => $userEmail];
+		$statement->execute($parameters);
+
+		// build array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($users);
+	}
 
 	public static function getAllUsers(\PDO $pdo){}
 
