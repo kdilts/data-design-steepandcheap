@@ -353,7 +353,44 @@ class User implements \JsonSerializable {
 	}
 
 	public static function getUserByName(\PDO $pdo, string $userName){
+		// sanitize username before searching
+		$userName = trim($userName);
+		$userName = filter_var($userName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($userName) === true){
+			throw (new \PDOException("username is invalid"));
+		}
 
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userName LIKE :userName";
+		$statement = $pdo->prepare($query);
+
+		// bind userName to placeholder in template
+		$userName = "%$userName%";
+		$parameters = ["userName" => $userName];
+		$statement->execute($parameters);
+
+		// build array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($users);
 	}
 
 	public static function getUserByEmail(\PDO $pdo, string $userEmail){}
