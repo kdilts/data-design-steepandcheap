@@ -2,6 +2,7 @@
 namespace Edu\Cnm\kdilts\DataDesign;
 
 // require_once("autoload.php");
+use MongoDB\Driver\Query;
 
 /**
  * @author Kevin Dilts <kdilts@cnm.edu>
@@ -557,8 +558,39 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
-	public static function getAllUsers(\PDO $pdo){}
+	public static function getAllUsers(\PDO $pdo){
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
 
-	public function jsonSerialize(){}
+		// build array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($users);
+	}
+
+	public function jsonSerialize(){
+		$fields = get_object_vars($this);
+		return $fields;
+	}
 
 }
