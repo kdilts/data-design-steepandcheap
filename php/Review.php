@@ -264,17 +264,15 @@ class Review {
 	/**
 	 * get review by reviewAuthorId
 	 * @param \PDO $pdo
-	 * @param string $reviewAuthorId
+	 * @param int $reviewAuthorId
 	 * @return Review|null
 	 * @throws \PDOException
 	 * @throws \TypeError
 	 */
-	public static function getReviewByAuthorId(\PDO $pdo, string $reviewAuthorId){
-		// sanitize reviewProductId before searching
-		$reviewAuthorId = trim($reviewAuthorId);
-		$reviewAuthorId = filter_var($reviewAuthorId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($reviewAuthorId) === true){
-			throw (new \PDOException("review author id is invalid"));
+	public static function getReviewByAuthorId(\PDO $pdo, int $reviewAuthorId){
+		// sanitize id before searching
+		if($reviewAuthorId <= 0){
+			throw new \PDOException("review id must be positive");
 		}
 
 		// create query template
@@ -310,17 +308,15 @@ class Review {
 	/**
 	 * get review by reviewProductId
 	 * @param \PDO $pdo
-	 * @param string $reviewProductId
+	 * @param int $reviewProductId
 	 * @return Review|null
 	 * @throws \PDOException
 	 * @throws \TypeError
 	 */
-	public static function getReviewByProductId(\PDO $pdo, string $reviewProductId){
-		// sanitize reviewProductId before searching
-		$reviewProductId = trim($reviewProductId);
-		$reviewProductId = filter_var($reviewProductId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($reviewProductId) === true){
-			throw (new \PDOException("review product id is invalid"));
+	public static function getReviewByProductId(\PDO $pdo, int $reviewProductId){
+		// sanitize id before searching
+		if($reviewProductId <= 0){
+			throw new \PDOException("review id must be positive");
 		}
 
 		// create query template
