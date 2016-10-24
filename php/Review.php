@@ -261,4 +261,48 @@ class Review {
 		$statement->execute($parameters);*/
 	}
 
+	/**
+	 * get review by reviewAuthorId
+	 * @param \PDO $pdo
+	 * @param string $reviewAuthorId
+	 * @return Review|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getReviewByAuthorId(\PDO $pdo, string $reviewAuthorId){
+		// sanitize id before searching
+		if($reviewAuthorId <= 0){
+			throw new \PDOException("review id must be positive");
+		}
+
+		// create query template
+		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewAuthorId LIKE :reviewAuthorId";
+		$statement = $pdo->prepare($query);
+
+		// bind the review id to the place holder in the template
+		$parameters = ["reviewAuthorId" => $reviewAuthorId];
+		$statement->execute($parameters);
+
+		// grab the review from mySQL
+		try{
+			$review = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$review = new Review(
+					$row["reviewAuthorId"],
+					$row["reviewProductId"],
+					$row["reviewRating"],
+					$row["reviewDatePosted"],
+					$row["reviewContent"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($review);
+	}
+
 }
