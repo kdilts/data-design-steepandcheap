@@ -279,5 +279,47 @@ class Product {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * get product by productId
+	 * @param \PDO $pdo
+	 * @param string $productId
+	 * @return Product|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getProductById(\PDO $pdo, string $productId){
+		// sanitize id before searching
+		if($productId <= 0){
+			throw new \PDOException("product id must be positive");
+		}
 
+		// create query template
+		$query = "SELECT productId, productName, productPrice, productImgPath, productSpecifications FROM product WHERE productId LIKE :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the product id to the place holder in the template
+		$parameters = ["productId" => $productId];
+		$statement->execute($parameters);
+
+		// grab the product from mySQL
+		try{
+			$product = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$product = new product(
+					$row["productId"],
+					$row["productName"],
+					$row["productPrice"],
+					$row["productImgPath"],
+					$row["productSpecifications"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($product);
+	}
 }
