@@ -448,4 +448,40 @@ class Product {
 		}
 		return($products);
 	}
+
+	public static function getProductBySpecifications(\PDO $pdo, string $productSpecifications){
+		// sanitize productSpecifications before searching
+		$productSpecifications = trim($productSpecifications);
+		$productSpecifications = filter_var($productSpecifications, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($productSpecifications) === true){
+			throw (new \PDOException("product name is invalid"));
+		}
+		// create query template
+		$query = "SELECT productId, productName, productPrice, productImgPath, productSpecifications FROM product WHERE productSpecifications LIKE :productSpecifications";
+		$statement = $pdo->prepare($query);
+		// bind productSpecifications to placeholder in template
+		$productSpecifications = "%$productSpecifications%";
+		$parameters = ["productSpecifications" => $productSpecifications];
+		$statement->execute($parameters);
+		// build array of products
+		$products = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product(
+					$row["productId"],
+					$row["productName"],
+					$row["productPrice"],
+					$row["productImgPath"],
+					$row["productSpecifications"]
+				);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
 }
