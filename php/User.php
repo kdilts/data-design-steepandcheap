@@ -255,6 +255,12 @@ class User implements \JsonSerializable {
 		$this->userEmail = $newUserEmail;
 	}
 
+	/**
+	 * inserts this user into mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public function insert(\PDO $pdo){
 		// enforce userId is null - don't insert user that already exists
 		if($this->userId !== null){
@@ -279,6 +285,12 @@ class User implements \JsonSerializable {
 		$this->userId = intval($pdo->lastInsertId());
 	}
 
+	/**
+	 * deletes user from mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public function delete(\PDO $pdo){
 		// enforce userId not null - don't delete user that does not exist
 		if($this->userId === null){
@@ -294,6 +306,10 @@ class User implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * updates user in mySQL
+	 * @param \PDO $pdo
+	 */
 	public function update(\PDO $pdo){
 		// enforce userId not null - don't delete user that does not exist
 		if($this->userId === null){
@@ -315,6 +331,14 @@ class User implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * returns a user by userId
+	 * @param \PDO $pdo
+	 * @param string $userId
+	 * @return User|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserById(\PDO $pdo, string $userId){
 		// sanitize id before searching
 		if($userId <= 0){
@@ -352,6 +376,14 @@ class User implements \JsonSerializable {
 		return($user);
 	}
 
+	/**
+	 * returns a user by userName
+	 * @param \PDO $pdo
+	 * @param string $userName
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserByName(\PDO $pdo, string $userName){
 		// sanitize username before searching
 		$userName = trim($userName);
@@ -393,6 +425,15 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * returns a user by userHash
+	 * returns user from mySQL
+	 * @param \PDO $pdo
+	 * @param string $userHash
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserByHash(\PDO $pdo, string $userHash){
 		// sanitize userHash before searching
 		$userHash = trim($userHash);
@@ -434,6 +475,14 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * returns a user by userSalt
+	 * @param \PDO $pdo
+	 * @param string $userSalt
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserBySalt(\PDO $pdo, string $userSalt){
 		// sanitize userSalt before searching
 		$userSalt = trim($userSalt);
@@ -475,6 +524,14 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * return user by userAddress
+	 * @param \PDO $pdo
+	 * @param string $userAddress
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserByAddress(\PDO $pdo, string $userAddress){
 		// sanitize userAddress before searching
 		$userAddress = trim($userAddress);
@@ -516,6 +573,14 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * returns user by userEmail
+	 * @param \PDO $pdo
+	 * @param string $userEmail
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getUserByEmail(\PDO $pdo, string $userEmail){
 		// sanitize userEmail before searching
 		$userEmail = trim($userEmail);
@@ -557,6 +622,13 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * returns all users
+	 * @param \PDO $pdo
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getAllUsers(\PDO $pdo){
 		// create query template
 		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user";
@@ -587,6 +659,10 @@ class User implements \JsonSerializable {
 		return($users);
 	}
 
+	/**
+	 * formats state variables for JSON serialization
+	 * @return array
+	 */
 	public function jsonSerialize(){
 		$fields = get_object_vars($this);
 		return $fields;
