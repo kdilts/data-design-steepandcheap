@@ -413,6 +413,14 @@ class Product {
 		return($products);
 	}
 
+	/**
+	 * get product by img path
+	 * @param \PDO $pdo
+	 * @param string $productImgPath
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getProductByImgPath(\PDO $pdo, string $productImgPath){
 		// sanitize productImgPath before searching
 		$productImgPath = trim($productImgPath);
@@ -449,6 +457,14 @@ class Product {
 		return($products);
 	}
 
+	/**
+	 * get product by product specifications
+	 * @param \PDO $pdo
+	 * @param string $productSpecifications
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
 	public static function getProductBySpecifications(\PDO $pdo, string $productSpecifications){
 		// sanitize productSpecifications before searching
 		$productSpecifications = trim($productSpecifications);
@@ -483,5 +499,50 @@ class Product {
 			}
 		}
 		return($products);
+	}
+
+	/**
+	 * returns all products
+	 * @param \PDO $pdo
+	 * @return \SplFixedArray
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getAllProducts(\PDO $pdo){
+		// create query template
+		$query = "SELECT productId, productName, productPrice, productImgPath, productSpecifications FROM product";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build array of products
+		$products = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product(
+					$row["productId"],
+					$row["productName"],
+					$row["productPrice"],
+					$row["productImgPath"],
+					$row["productSpecifications"]
+				);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($products);
+	}
+
+	/**
+	 * formats state variables for JSON serialization
+	 * @return array
+	 */
+	public function jsonSerialize(){
+		$fields = get_object_vars($this);
+		return $fields;
 	}
 }
