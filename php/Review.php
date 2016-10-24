@@ -270,9 +270,11 @@ class Review {
 	 * @throws \TypeError
 	 */
 	public static function getReviewByAuthorId(\PDO $pdo, string $reviewAuthorId){
-		// sanitize id before searching
-		if($reviewAuthorId <= 0){
-			throw new \PDOException("review id must be positive");
+		// sanitize reviewProductId before searching
+		$reviewAuthorId = trim($reviewAuthorId);
+		$reviewAuthorId = filter_var($reviewAuthorId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($reviewAuthorId) === true){
+			throw (new \PDOException("review author id is invalid"));
 		}
 
 		// create query template
@@ -314,9 +316,11 @@ class Review {
 	 * @throws \TypeError
 	 */
 	public static function getReviewByProductId(\PDO $pdo, string $reviewProductId){
-		// sanitize id before searching
-		if($reviewProductId <= 0){
-			throw new \PDOException("review id must be positive");
+		// sanitize reviewProductId before searching
+		$reviewProductId = trim($reviewProductId);
+		$reviewProductId = filter_var($reviewProductId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($reviewProductId) === true){
+			throw (new \PDOException("review product id is invalid"));
 		}
 
 		// create query template
@@ -348,5 +352,49 @@ class Review {
 
 		return($review);
 	}
-	
+
+	/**
+	 * get review by reviewRating
+	 * @param \PDO $pdo
+	 * @param int $reviewRating
+	 * @return Review|null
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public static function getReviewByRating(\PDO $pdo, int $reviewRating){
+		// sanitize id before searching
+		if($reviewRating > 0 && $reviewRating < 6){
+			throw new \PDOException("review rating must be between 1 and 5 inclusive");
+		}
+
+		// create query template
+		$query = "SELECT reviewAuthorId, reviewProductId, reviewRating, reviewDatePosted, reviewContent FROM review WHERE reviewRating LIKE :reviewRating";
+		$statement = $pdo->prepare($query);
+
+		// bind the review product id to the place holder in the template
+		$parameters = ["reviewRating" => $reviewRating];
+		$statement->execute($parameters);
+
+		// grab the review from mySQL
+		try{
+			$review = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false){
+				$review = new Review(
+					$row["reviewAuthorId"],
+					$row["reviewProductId"],
+					$row["reviewRating"],
+					$row["reviewDatePosted"],
+					$row["reviewContent"]
+				);
+			}
+		} catch (\Exception $exception){
+			// if row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		return($review);
+	}
+
 }
