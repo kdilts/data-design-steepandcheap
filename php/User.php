@@ -2,7 +2,6 @@
 namespace Edu\Cnm\kdilts\DataDesign;
 
 // require_once("autoload.php");
-use MongoDB\Driver\Query;
 
 /**
  * @author Kevin Dilts <kdilts@cnm.edu>
