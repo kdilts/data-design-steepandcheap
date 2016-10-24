@@ -395,7 +395,46 @@ class User implements \JsonSerializable {
 
 	public static function getUserByHash(\PDO $pdo, string $userHash){}
 
-	public static function getUserBySalt(\PDO $pdo, string $userSalt){}
+	public static function getUserBySalt(\PDO $pdo, string $userSalt){
+		// sanitize userSalt before searching
+		$userSalt = trim($userSalt);
+		$userSalt = filter_var($userSalt, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($userSalt) === true){
+			throw (new \PDOException("userSalt is invalid"));
+		}
+
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userSalt LIKE :userSalt";
+		$statement = $pdo->prepare($query);
+
+		// bind userSalt to placeholder in template
+		$userSalt = "%$userSalt%";
+		$parameters = ["userSalt" => $userSalt];
+		$statement->execute($parameters);
+
+		// build array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($users);
+	}
 
 	public static function getUserByAddress(\PDO $pdo, string $userAddress){
 		// sanitize userAddress before searching
@@ -406,12 +445,12 @@ class User implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userEmail LIKE :userEmail";
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userAddress LIKE :userAddress";
 		$statement = $pdo->prepare($query);
 
 		// bind userAddress to placeholder in template
 		$userAddress = "%$userAddress%";
-		$parameters = ["userEmail" => $userAddress];
+		$parameters = ["userAddress" => $userAddress];
 		$statement->execute($parameters);
 
 		// build array of users
