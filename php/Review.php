@@ -193,7 +193,7 @@ class Review {
 	 */
 	public function insert(\PDO $pdo){
 		// enforce reviewId is null - don't insert review that already exists
-		if($this->reviewId !== null){
+		/*if($this->reviewId !== null){
 			throw new \PDOException("not a new review");
 		}
 
@@ -212,7 +212,7 @@ class Review {
 		$statement->execute($parameters);
 
 		// update null reviewId with what mySQL just gave us
-		$this->reviewId = intval($pdo->lastInsertId());
+		$this->reviewId = intval($pdo->lastInsertId());*/
 	}
 
 	/**
@@ -223,7 +223,7 @@ class Review {
 	 */
 	public function delete(\PDO $pdo){
 		// enforce reviewId not null - don't delete review that does not exist
-		if($this->reviewId === null){
+		/*if($this->reviewId === null){
 			throw new \PDOException("unable to delete review that does not exist");
 		}
 
@@ -233,7 +233,7 @@ class Review {
 
 		// bind variables to the placeholders in template
 		$parameters = ["reviewId" => $this->reviewId];
-		$statement->execute($parameters);
+		$statement->execute($parameters);*/
 	}
 
 	/**
@@ -242,7 +242,7 @@ class Review {
 	 */
 	public function update(\PDO $pdo){
 		// enforce reviewId not null - don't delete review that does not exist
-		if($this->reviewId === null){
+		/*if($this->reviewId === null){
 			throw new \PDOException("unable to update review that does not exist");
 		}
 
@@ -258,7 +258,7 @@ class Review {
 			"reviewDatePosted" => $this->reviewDatePosted,
 			"reviewContent" => $this->reviewContent
 		];
-		$statement->execute($parameters);
+		$statement->execute($parameters);*/
 	}
 
 }
