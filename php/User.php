@@ -273,7 +273,7 @@ class User implements \JsonSerializable {
 
 		// bind variables to the placeholders in template
 		$parameters = [
-			"userID" => $this->userId,
+			"userId" => $this->userId,
 			"userName" => $this->userName,
 			"userEmail" => $this->userEmail,
 			"userHash" => $this->userHash,
@@ -322,7 +322,7 @@ class User implements \JsonSerializable {
 
 		// bind variables to placeholder in template
 		$parameters = [
-			"userID" => $this->userId,
+			"userId" => $this->userId,
 			"userName" => $this->userName,
 			"userEmail" => $this->userEmail,
 			"userHash" => $this->userHash,

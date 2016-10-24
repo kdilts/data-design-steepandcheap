@@ -202,4 +202,82 @@ class Product {
 		// store the product specifications
 		$this->productSpecifications = $newProductSpecifications;
 	}
+
+	/**
+	 * inserts this product into mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public function insert(\PDO $pdo){
+		// enforce productId is null - don't insert product that already exists
+		if($this->productId !== null){
+			throw new \PDOException("not a new product");
+		}
+
+		// create query template
+		$query = "INSERT INTO product(productId, productName, productPrice, productImgPath, productSpecifications) VALUES (:productId, :productName, :productPrice, :productImgPath, :productSpecifications)";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = [
+			"productId" => $this->productId,
+			"productName" => $this->productName,
+			"productPrice" => $this->productPrice,
+			"productImgPath" => $this->productImgPath,
+			"productSpecifications" => $this->productSpecifications
+		];
+		$statement->execute($parameters);
+
+		// update null productId with what mySQL just gave us
+		$this->productId = intval($pdo->lastInsertId());
+	}
+
+	/**
+	 * deletes product from mySQL
+	 * @param \PDO $pdo
+	 * @throws \PDOException
+	 * @throws \TypeError
+	 */
+	public function delete(\PDO $pdo){
+		// enforce productId not null - don't delete product that does not exist
+		if($this->productId === null){
+			throw new \PDOException("unable to delete product that does not exist");
+		}
+
+		// create query template
+		$query = "DELETE FROM product WHERE productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = ["productId" => $this->productId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates product in mySQL
+	 * @param \PDO $pdo
+	 */
+	public function update(\PDO $pdo){
+		// enforce productId not null - don't delete product that does not exist
+		if($this->productId === null){
+			throw new \PDOException("unable to update product that does not exist");
+		}
+
+		// create query template
+		$query = "UPDATE product SET productId = :productId, productName = :productName";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to placeholder in template
+		$parameters = [
+			"productId" => $this->productId,
+			"productName" => $this->productName,
+			"productPrice" => $this->productPrice,
+			"productImgPath" => $this->productImgPath,
+			"productSpecifications" => $this->productSpecifications
+		];
+		$statement->execute($parameters);
+	}
+
+
 }
