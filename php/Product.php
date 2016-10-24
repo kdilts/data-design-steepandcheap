@@ -203,5 +203,3 @@ class Product {
 		$this->productSpecifications = $newProductSpecifications;
 	}
 }
-
-?>
