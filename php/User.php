@@ -7,7 +7,7 @@ namespace Edu\Cnm\kdilts\DataDesign;
  * @author Kevin Dilts <kdilts@cnm.edu>
  * @version 1.0.0
  */
-class User {
+class User implements \JsonSerializable {
 	/**
 	 * id for this User; this is the primary key
 	 * @var int $userId
@@ -254,6 +254,79 @@ class User {
 		// store the user email
 		$this->userEmail = $newUserEmail;
 	}
-}
 
-?>
+	public function insert(\PDO $pdo){
+		// enforce userId is null - don't insert user that already exists
+		if($this->userId !== null){
+			throw new \PDOException("not a new user");
+		}
+
+		// create query template
+		$query = "INSERT INTO user(userId, userName, userEmail, userHash, userSalt) VALUES (:userId, :userName, :userEmail, :userHash, :userSalt)";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = [
+			"userID" => $this->userId,
+			"userName" => $this->userName,
+			"userEmail" => $this->userEmail,
+			"userHash" => $this->userHash,
+			"userSalt" => $this->userSalt
+		];
+		$statement->execute($parameters);
+
+		// update null userId with what mySQL just gave us
+		$this->userId = intval($pdo->lastInsertId());
+	}
+
+	public function delete(\PDO $pdo){
+		// enforce userId not null - don't delete user that does not exist
+		if($this->userId === null){
+			throw new \PDOException("unable to delete user that does not exist");
+		}
+
+		// create query template
+		$query = "DELETE FROM user WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to the placeholders in template
+		$parameters = ["userId" => $this->userId];
+		$statement->execute($parameters);
+	}
+
+	public function update(\PDO $pdo){
+		// enforce userId not null - don't delete user that does not exist
+		if($this->userId === null){
+			throw new \PDOException("unable to update user that does not exist");
+		}
+
+		// create query template
+		$query = "UPDATE user SET userId = :userId, userName = :userName, userEmail = :userEmail, userHash = :userHash, userSalt = :userSalt";
+		$statement = $pdo->prepare($query);
+
+		// bind variables to placeholder in template
+		$parameters = [
+			"userID" => $this->userId,
+			"userName" => $this->userName,
+			"userEmail" => $this->userEmail,
+			"userHash" => $this->userHash,
+			"userSalt" => $this->userSalt
+		];
+		$statement->execute($parameters);
+	}
+
+	public static function getUserById(\PDO $pdo, string $userId){}
+
+	public static function getUserByName(\PDO $pdo, string $userName){}
+
+	public static function getUserByEmail(\PDO $pdo, string $userEmail){}
+
+	public static function getUserByHash(\PDO $pdo, string $userHash){}
+
+	public static function getUserBySalt(\PDO $pdo, string $userSalt){}
+
+	public static function getAllUsers(\PDO $pdo){}
+
+	public function jsonSerialize(){}
+
+}
