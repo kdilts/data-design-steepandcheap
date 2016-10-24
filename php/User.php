@@ -397,7 +397,46 @@ class User implements \JsonSerializable {
 
 	public static function getUserBySalt(\PDO $pdo, string $userSalt){}
 
-	public static function getUserByAddress(\PDO $pdo, string $userAddress){}
+	public static function getUserByAddress(\PDO $pdo, string $userAddress){
+		// sanitize userAddress before searching
+		$userAddress = trim($userAddress);
+		$userAddress = filter_var($userAddress, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($userAddress) === true){
+			throw (new \PDOException("userAddress is invalid"));
+		}
+
+		// create query template
+		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userEmail LIKE :userEmail";
+		$statement = $pdo->prepare($query);
+
+		// bind userAddress to placeholder in template
+		$userAddress = "%$userAddress%";
+		$parameters = ["userEmail" => $userAddress];
+		$statement->execute($parameters);
+
+		// build array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User(
+					$row["userId"],
+					$row["userName"],
+					$row["userHash"],
+					$row["userSalt"],
+					$row["userAddress"],
+					$row["userEmail"]
+				);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($users);
+	}
 
 	public static function getUserByEmail(\PDO $pdo, string $userEmail){
 		// sanitize userEmail before searching
@@ -411,7 +450,7 @@ class User implements \JsonSerializable {
 		$query = "SELECT userId, userName, userHash, userSalt, userAddress, userEmail FROM user WHERE userEmail LIKE :userEmail";
 		$statement = $pdo->prepare($query);
 
-		// bind userName to placeholder in template
+		// bind userEmail to placeholder in template
 		$userEmail = "%$userEmail%";
 		$parameters = ["userEmail" => $userEmail];
 		$statement->execute($parameters);
